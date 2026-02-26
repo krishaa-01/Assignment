@@ -122,13 +122,39 @@ class PasswordManager:
         self._btn(d, "CREATE VAULT", create, color=ACCENT2)
 
     def login(self):
-        d = self._dialog("Unlock Vault", 420, 280)
-        self._label(d, "VAULT", 24, bold=True, color=ACCENT).pack(pady=(28, 0))
-        tk.Frame(d, bg=ACCENT, height=2, width=260).pack(pady=(4, 18))
-        self._label(d, "Enter master password to unlock", 9, color=MUTED).pack(pady=(2, 16))
+        d = self._dialog("Unlock Vault", 460, 360)
 
-        self._label(d, "PASSWORD", 8, color=MUTED).pack(anchor="w", padx=30)
-        pwd = self._entry(d, show="•")
+        # Center card container
+        card = tk.Frame(d, bg=SURFACE)
+        card.place(relx=0.5, rely=0.5, anchor="center", width=380, height=260)
+
+        # Title
+        tk.Label(card, text="VAULT",
+                bg=SURFACE, fg=ACCENT,
+                font=(FONT, 26, "bold")).pack(pady=(30, 5))
+
+        tk.Label(card,
+                text="Enter your master password",
+                bg=SURFACE, fg=MUTED,
+                font=(FONT, 9)).pack(pady=(0, 20))
+
+        # Password entry
+        pwd = tk.Entry(card,
+                    show="•",
+                    bg=CARD, fg=TEXT,
+                    insertbackground=ACCENT,
+                    relief="flat",
+                    font=(FONT, 11),
+                    highlightthickness=1,
+                    highlightbackground=BORDER,
+                    highlightcolor=ACCENT)
+        pwd.pack(ipady=8, ipadx=10)
+
+        # Unlock button
+        unlock_btn = tk.Button(card,text="UNLOCK",command=lambda: verify(),
+                            bg=ACCENT,fg=BG,relief="flat",font=(FONT, 10, "bold"),
+                            cursor="hand2",padx=20,pady=8)
+        unlock_btn.pack(pady=25)
 
         def verify():
             key = self.security.hash_master_password(pwd.get())
@@ -140,10 +166,8 @@ class PasswordManager:
             self.load_data()
             d.destroy()
             self.create_ui()
-
+            
         pwd.bind("<Return>", lambda e: verify())
-        self._btn(d, "UNLOCK", verify, color=ACCENT, width=18)
-
     # ── Data ───────────────────────────────────────────────────
     def save_data(self):
         data = json.dumps(self.passwords).encode()
