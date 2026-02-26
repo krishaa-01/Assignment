@@ -294,6 +294,21 @@ class PasswordManager:
         d, fields = self._form_dialog("Add Credential", 400, 420,
                                       ["Website", "Username", "Password", "Notes"])
         sl = self._label(d, "Strength: —", 9, bold=True, color=MUTED)
+        d, fields = self._form_dialog("Add Credential", 400, 420,["Website", "Username", "Password", "Notes"])
+
+        # Show / Hide password toggle
+        pwd_entry = fields[2]
+
+        def toggle_password():
+            if pwd_entry.cget("show") == "•":
+                pwd_entry.config(show="")
+                toggle_btn.config(text="HIDE")
+            else:
+                pwd_entry.config(show="•")
+                toggle_btn.config(text="SHOW")
+
+        toggle_btn = tk.Button(d, text="SHOW",command=toggle_password,bg=CARD, fg=MUTED,relief="flat",font=(FONT, 8),cursor="hand2")
+        toggle_btn.pack(pady=(0, 8))
         sl.pack()
 
         # Strength progress bar with custom style
