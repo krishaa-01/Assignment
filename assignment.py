@@ -166,7 +166,7 @@ class PasswordManager:
             self.load_data()
             d.destroy()
             self.create_ui()
-            
+
         pwd.bind("<Return>", lambda e: verify())
     # ── Data ───────────────────────────────────────────────────
     def save_data(self):
@@ -242,9 +242,27 @@ class PasswordManager:
         main = tk.Frame(self.window, bg=BG)
         main.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
+        # Top header
+        header = tk.Frame(main, bg=SURFACE, height=60)
+        header.pack(fill=tk.X)
+        header.pack_propagate(False)
+
+        tk.Label(header,
+                text="Dashboard",
+                bg=SURFACE,
+                fg=TEXT,
+                font=(FONT, 14, "bold")).pack(side=tk.LEFT, padx=20)
+
+        self.stats_label = tk.Label(header,
+                                    text="0 credentials",
+                                    bg=SURFACE,
+                                    fg=MUTED,
+                                    font=(FONT, 9))
+        self.stats_label.pack(side=tk.RIGHT, padx=20)
+
         # Search bar
         search_frame = tk.Frame(main, bg=BG)
-        search_frame.pack(fill=tk.X, padx=20, pady=(16, 8))
+        search_frame.pack(fill=tk.X, padx=20, pady=(20, 10))
         self._label(search_frame, "🔍", 11, color=MUTED).pack(side=tk.LEFT, padx=(0, 6))
         self.search_var = tk.StringVar()
         self.search_var.trace("w", lambda *a: self.refresh_list())
@@ -266,8 +284,8 @@ class PasswordManager:
         style.map("Vault.Treeview", background=[("selected", BORDER)],
                   foreground=[("selected", ACCENT)])
 
-        tree_frame = tk.Frame(main, bg=BG, highlightthickness=0, bd=0)
-        tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 16))
+        tree_frame = tk.Frame(main, bg=SURFACE, highlightthickness=0, bd=0)
+        tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
 
         scroll = ttk.Scrollbar(tree_frame)
         scroll.pack(side=tk.RIGHT, fill=tk.Y)
@@ -296,6 +314,8 @@ class PasswordManager:
         if hasattr(self, "count_lbl"):
             n = len(self.passwords)
             self.count_lbl.config(text=f"{n} credential{'s' if n!=1 else ''} stored")
+            if hasattr(self, "stats_label"):
+                self.stats_label.config(text=f"{n} credential{'s' if n!=1 else ''}")
 
     # ── CRUD dialogs ───────────────────────────────────────────
     def _form_dialog(self, title, w, h, labels, values=None):
