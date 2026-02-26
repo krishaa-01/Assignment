@@ -122,8 +122,9 @@ class PasswordManager:
         self._btn(d, "CREATE VAULT", create, color=ACCENT2)
 
     def login(self):
-        d = self._dialog("Unlock Vault", 380, 230)
-        self._label(d, "VAULT", 20, bold=True, color=ACCENT).pack(pady=(28, 0))
+        d = self._dialog("Unlock Vault", 420, 280)
+        self._label(d, "VAULT", 24, bold=True, color=ACCENT).pack(pady=(28, 0))
+        tk.Frame(d, bg=ACCENT, height=2, width=260).pack(pady=(4, 18))
         self._label(d, "Enter master password to unlock", 9, color=MUTED).pack(pady=(2, 16))
 
         self._label(d, "PASSWORD", 8, color=MUTED).pack(anchor="w", padx=30)
@@ -141,7 +142,7 @@ class PasswordManager:
             self.create_ui()
 
         pwd.bind("<Return>", lambda e: verify())
-        self._btn(d, "UNLOCK", verify, color=ACCENT)
+        self._btn(d, "UNLOCK", verify, color=ACCENT, width=18)
 
     # ── Data ───────────────────────────────────────────────────
     def save_data(self):
