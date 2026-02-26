@@ -296,19 +296,46 @@ class PasswordManager:
         sl = self._label(d, "Strength: —", 9, bold=True, color=MUTED)
         sl.pack()
 
+        # Strength progress bar
+        progress = ttk.Progressbar(d, length=250, mode="determinate")
+        progress.pack(pady=5)
+        progress["maximum"] = 100
+
         # Generate password button
         def generate_and_fill():
             pwd = self.generate_password()
             fields[2].delete(0, tk.END)
             fields[2].insert(0, pwd)
+
             s, c = self.check_strength(pwd)
             sl.config(text=f"Strength: {s}", fg=c)
-            
+
+            # Update progress bar
+            if s == "WEAK":
+                progress["value"] = 30
+            elif s == "MEDIUM":
+                progress["value"] = 60
+            elif s == "STRONG":
+                progress["value"] = 100
+            else:
+                progress["value"] = 0
+
         self._btn(d, "GENERATE STRONG PASSWORD", generate_and_fill, color=ACCENT)
 
         def upd(*_):
-            s, c = self.check_strength(fields[2].get())
+            pwd = fields[2].get()
+            s, c = self.check_strength(pwd)
             sl.config(text=f"Strength: {s}", fg=c)
+
+            # Update progress bar
+            if s == "WEAK":
+                progress["value"] = 30
+            elif s == "MEDIUM":
+                progress["value"] = 60
+            elif s == "STRONG":
+                progress["value"] = 100
+            else:
+                progress["value"] = 0
         fields[2].bind("<KeyRelease>", upd)
 
         def save():
