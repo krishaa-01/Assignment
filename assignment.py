@@ -296,8 +296,16 @@ class PasswordManager:
         sl = self._label(d, "Strength: —", 9, bold=True, color=MUTED)
         sl.pack()
 
-        # Strength progress bar
-        progress = ttk.Progressbar(d, length=250, mode="determinate")
+        # Strength progress bar with custom style
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        style.configure("Weak.Horizontal.TProgressbar", troughcolor=CARD, background=DANGER)
+        style.configure("Medium.Horizontal.TProgressbar", troughcolor=CARD, background=WARNING)
+        style.configure("Strong.Horizontal.TProgressbar", troughcolor=CARD, background=ACCENT2)
+
+        progress = ttk.Progressbar(d, length=250, mode="determinate",
+                                style="Weak.Horizontal.TProgressbar")
         progress.pack(pady=5)
         progress["maximum"] = 100
 
@@ -313,10 +321,13 @@ class PasswordManager:
             # Update progress bar
             if s == "WEAK":
                 progress["value"] = 30
+                progress.configure(style="Weak.Horizontal.TProgressbar")
             elif s == "MEDIUM":
                 progress["value"] = 60
+                progress.configure(style="Medium.Horizontal.TProgressbar")
             elif s == "STRONG":
                 progress["value"] = 100
+                progress.configure(style="Strong.Horizontal.TProgressbar")
             else:
                 progress["value"] = 0
 
@@ -330,10 +341,13 @@ class PasswordManager:
             # Update progress bar
             if s == "WEAK":
                 progress["value"] = 30
+                progress.configure(style="Weak.Horizontal.TProgressbar")
             elif s == "MEDIUM":
                 progress["value"] = 60
+                progress.configure(style="Medium.Horizontal.TProgressbar")
             elif s == "STRONG":
                 progress["value"] = 100
+                progress.configure(style="Strong.Horizontal.TProgressbar")
             else:
                 progress["value"] = 0
         fields[2].bind("<KeyRelease>", upd)
