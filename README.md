@@ -1,111 +1,35 @@
-# 🔐 Simple Password Manager
+**VAULT - GUI-based Secure Password Manager**
+-> VAULT is a desktop password manager built using Python and Tkinter. It allows users to securely store and manage credentials locally using encryption.
 
-A clean, easy-to-use password manager with encryption and strength checking.
+**Features**
+- Master password authentication
+- Encrypted storage using Fernet (cryptography library)
+- Add, edit, view, and delete credentials
+- Password strength indicator (Weak / Medium / Strong)
+- Random strong password generator
+- Search functionality
+- Dark themed user interface
 
-## Features
+**How It Works**
+-> When the application is launched for the first time, the user creates a master password.The master password is hashed using SHA-256 and used to generate an encryption key. All credentials are encrypted before being stored in a local file. When logging in, the entered master password is verified and used to decrypt the stored data.
 
-✅ **Secure Storage** - Military-grade encryption (AES-256)  
-✅ **Add/View/Edit/Delete** - Full password management  
-✅ **Strength Checker** - Real-time password strength indicator  
-✅ **Master Password** - One password to secure everything  
-✅ **Simple Interface** - Clean, dark-themed UI  
+**How to Run**
+1. Install the required dependency:
+-> pip install cryptography
 
-## Quick Start
+2. Run the application:
+-> python assignment.py
 
-### Installation
+**Project Files**
+- assignment.py — Main application file  
+- README.md — Project documentation  
 
-1. **Install Python** (3.7 or higher)
-2. **Install required library:**
-   ```bash
-   pip install cryptography
-   ```
+**Purpose of This Project**
+-> This project was created to practice:
 
-3. **Run the app:**
-   ```bash
-   python password_manager_simple.py
-   ```
+- GUI development with Tkinter  
+- Encryption and hashing concepts  
+- File handling in Python  
+- Basic UI/UX design  
 
-### First Time Use
-
-1. Create a master password (remember this - it can't be recovered!)
-2. Start adding your passwords
-
-## How to Use
-
-### Add Password
-1. Click **Add**
-2. Enter website, username, and password
-3. See strength indicator update in real-time
-4. Click **Save**
-
-### View Password
-1. Select a password from the list
-2. Click **View**
-3. Click **Show** to reveal password
-4. Click **Copy** to copy to clipboard
-
-### Edit Password
-1. Select a password
-2. Click **Edit**
-3. Update the fields
-4. Click **Update**
-
-### Delete Password
-1. Select a password
-2. Click **Delete**
-3. Confirm deletion
-
-## Password Strength Guide
-
-🔴 **Weak** - Too short or simple  
-🟠 **Medium** - Good but could be better  
-🟢 **Strong** - Excellent security  
-
-**Tips for strong passwords:**
-- 12+ characters
-- Mix uppercase and lowercase
-- Include numbers
-- Add special characters (!@#$%^&*)
-
-## Files
-
-- `password_manager_simple.py` - Main application
-- `passwords.enc` - Encrypted password storage
-- `master.key` - Encrypted master key
-
-**⚠️ Backup these files regularly!**
-
-## Security Notes
-
-✅ All passwords encrypted  
-✅ Master password never stored  
-✅ Data secured with AES-256  
-❌ No password recovery - keep master password safe!  
-
-## Troubleshooting
-
-**"No module named 'cryptography'"**
-```bash
-pip install cryptography
-```
-
-**"No module named 'tkinter'"** (Linux)
-```bash
-sudo apt-get install python3-tk
-```
-
-**Wrong master password?**
-- No recovery possible (by design for security)
-- Delete `master.key` and `passwords.enc` to start fresh
-
-## Code Simplifications
-
-This simplified version has:
-- **~300 lines** (vs 500+ in full version)
-- Removed timestamps and date tracking
-- Simplified dialog creation
-- Streamlined UI layout
-- Cleaner, more readable code
-- Same core features and security
-
-Perfect for learning or personal use! 🚀
+All data is stored locally on the user's machine.
