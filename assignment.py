@@ -291,7 +291,7 @@ class PasswordManager:
         return d, fields
 
     def add_password(self):
-        d, fields = self._form_dialog("Add Credential", 400, 420,["Website", "Username", "Password", "Notes"])
+        d, fields = self._form_dialog("Add Credential", 400, 520,["Website", "Username", "Password", "Notes"])
         sl = self._label(d, "Strength: —", 9, bold=True, color=MUTED)
 
         # Show / Hide password toggle
