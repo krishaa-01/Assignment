@@ -217,18 +217,34 @@ class PasswordManager:
 
         tk.Frame(sidebar, bg=BORDER, height=1).pack(fill=tk.X, padx=16, pady=20)
 
+        # Navigation buttons list
+        self.nav_buttons = []
+
         actions = [("＋  ADD",    self.add_password,    ACCENT2),
                    ("◎  VIEW",   self.view_password,   ACCENT),
                    ("✎  EDIT",   self.edit_password,   WARNING),
                    ("✕  DELETE", self.delete_password, DANGER)]
 
         for label, cmd, color in actions:
-            b = tk.Button(sidebar, text=label, command=cmd, bg=SURFACE, fg=color,
-                        font=(FONT, 10, "bold"), relief="flat", bd=0,
-                        activebackground=CARD, activeforeground=color,
-                        cursor="hand2", anchor="w", padx=20, pady=12)
+            def make_cmd(c=cmd):
+                def wrapper():
+                    self.set_active_button(b)
+                    c()
+                return wrapper
+
+            b = tk.Button(sidebar, text=label,command=make_cmd(),
+                        bg=SURFACE, fg=color,font=(FONT, 10, "bold"),
+                        relief="flat", bd=0,activebackground=CARD,
+                        activeforeground=color,cursor="hand2",
+                        anchor="w",padx=20,pady=12)
 
             b.pack(fill=tk.X)
+
+            # Hover
+            b.bind("<Enter>", lambda e, btn=b: btn.config(bg=CARD))
+            b.bind("<Leave>", lambda e, btn=b: btn.config(bg=SURFACE))
+
+            self.nav_buttons.append(b)
 
             # Hover animation
             b.bind("<Enter>", lambda e, btn=b: btn.config(bg=CARD))
@@ -486,6 +502,12 @@ class PasswordManager:
             del self.passwords[site]
             self.save_data(); self.refresh_list()
 
+    def set_active_button(self, active_btn):
+        for btn in self.nav_buttons:
+            btn.config(bg=SURFACE)
+
+        active_btn.config(bg=BORDER)
+    
     def run(self):
         self.window.mainloop()
 
