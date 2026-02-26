@@ -18,7 +18,7 @@ DANGER   = "#f75555"
 WARNING  = "#f7a355"
 TEXT     = "#e8eaf0"
 MUTED    = "#6b7280"
-FONT     = "Consolas"
+FONT     = "Segoe UI Variable"
 
 class SecurityManager: 
     """Handles hashing, encryption, and decryption operations."""
@@ -29,37 +29,29 @@ class SecurityManager:
 
     @staticmethod
     def hash_master_password(password):
-        """
-        Hash master password using SHA-256.
-        """
+        """Hash master password using SHA-256."""
         return base64.urlsafe_b64encode(
             hashlib.sha256(password.encode()).digest()
         )
 
     def set_key(self, key):
-        """
-        Set encryption key and initialize cipher.
-        """
+        """Set encryption key and initialize cipher."""
         self.key = key
         self.cipher = Fernet(key)
 
     def encrypt(self, data):
-        """
-        Encrypt byte data.
-        """
+        """Encrypt byte data."""
         return self.cipher.encrypt(data)
 
     def decrypt(self, data):
-        """
-        Decrypt byte data.
-        """
+        """Decrypt byte data."""
         return self.cipher.decrypt(data)
 
 class PasswordManager:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("VAULT — Secure Password Manager")
-        self.window.geometry("860x520")
+        self.window.geometry("920x560")
         self.window.configure(bg=BG)
         self.window.resizable(False, False)
 
@@ -207,10 +199,15 @@ class PasswordManager:
 
         for label, cmd, color in actions:
             b = tk.Button(sidebar, text=label, command=cmd, bg=SURFACE, fg=color,
-                          font=(FONT, 10, "bold"), relief="flat", bd=0,
-                          activebackground=CARD, activeforeground=color,
-                          cursor="hand2", anchor="w", padx=20, pady=10)
+                        font=(FONT, 10, "bold"), relief="flat", bd=0,
+                        activebackground=CARD, activeforeground=color,
+                        cursor="hand2", anchor="w", padx=20, pady=12)
+
             b.pack(fill=tk.X)
+
+            # Hover animation
+            b.bind("<Enter>", lambda e, btn=b: btn.config(bg=CARD))
+            b.bind("<Leave>", lambda e, btn=b: btn.config(bg=SURFACE))
 
         # Count badge
         self.count_lbl = self._label(sidebar, "", 8, color=MUTED)
@@ -244,7 +241,7 @@ class PasswordManager:
         style.map("Vault.Treeview", background=[("selected", BORDER)],
                   foreground=[("selected", ACCENT)])
 
-        tree_frame = tk.Frame(main, bg=BG)
+        tree_frame = tk.Frame(main, bg=BG, highlightthickness=0, bd=0)
         tree_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 16))
 
         scroll = ttk.Scrollbar(tree_frame)
@@ -256,7 +253,7 @@ class PasswordManager:
         for col, w in [("Website", 260), ("Username", 220), ("Strength", 90)]:
             self.tree.heading(col, text=col.upper())
             self.tree.column(col, width=w, anchor="w")
-        self.tree.pack(fill=tk.BOTH, expand=True)
+        self.tree.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
         scroll.config(command=self.tree.yview)
 
         self.refresh_list()
