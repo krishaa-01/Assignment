@@ -20,6 +20,43 @@ TEXT     = "#e8eaf0"
 MUTED    = "#6b7280"
 FONT     = "Consolas"
 
+class SecurityManager:
+    """
+    Handles hashing, encryption, and decryption operations.
+    """
+
+    def __init__(self, key=None):
+        self.key = key
+        self.cipher = Fernet(key) if key else None
+
+    @staticmethod
+    def hash_master_password(password):
+        """
+        Hash master password using SHA-256.
+        """
+        return base64.urlsafe_b64encode(
+            hashlib.sha256(password.encode()).digest()
+        )
+
+    def set_key(self, key):
+        """
+        Set encryption key and initialize cipher.
+        """
+        self.key = key
+        self.cipher = Fernet(key)
+
+    def encrypt(self, data):
+        """
+        Encrypt byte data.
+        """
+        return self.cipher.encrypt(data)
+
+    def decrypt(self, data):
+        """
+        Decrypt byte data.
+        """
+        return self.cipher.decrypt(data)
+
 class PasswordManager:
     def __init__(self):
         self.window = tk.Tk()
