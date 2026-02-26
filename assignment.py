@@ -65,7 +65,7 @@ class PasswordManager:
         self.window.configure(bg=BG)
         self.window.resizable(False, False)
 
-        self.cipher = None
+        self.security = SecurityManager()
         self.passwords = {}
 
         if not os.path.exists("master.key"):
@@ -74,9 +74,6 @@ class PasswordManager:
             self.login()
 
     # ── Helpers ────────────────────────────────────────────────
-    def hash_password(self, password):
-        return base64.urlsafe_b64encode(hashlib.sha256(password.encode()).digest())
-
     def _dialog(self, title, w, h):
         d = tk.Toplevel(self.window)
         d.title(title)
@@ -124,10 +121,10 @@ class PasswordManager:
             if not pwd1.get() or pwd1.get() != pwd2.get():
                 messagebox.showerror("Error", "Passwords don't match or are empty!")
                 return
-            key = self.hash_password(pwd1.get())
+            key = self.security.hash_master_password(pwd1.get())
             with open("master.key", "wb") as f:
                 f.write(key)
-            self.cipher = Fernet(key)
+            self.security.set_key(key)
             self.save_data()
             d.destroy()
             self.create_ui()
@@ -143,12 +140,12 @@ class PasswordManager:
         pwd = self._entry(d, show="•")
 
         def verify():
-            key = self.hash_password(pwd.get())
+            key = self.security.hash_master_password(pwd.get())
             with open("master.key", "rb") as f:
                 if key != f.read():
                     messagebox.showerror("Error", "Incorrect password.")
                     return
-            self.cipher = Fernet(key)
+            self.security.set_key(key)
             self.load_data()
             d.destroy()
             self.create_ui()
@@ -160,12 +157,12 @@ class PasswordManager:
     def save_data(self):
         data = json.dumps(self.passwords).encode()
         with open("passwords.enc", "wb") as f:
-            f.write(self.cipher.encrypt(data))
+            f.write(self.security.encrypt(data))
 
     def load_data(self):
         if os.path.exists("passwords.enc"):
             with open("passwords.enc", "rb") as f:
-                self.passwords = json.loads(self.cipher.decrypt(f.read()).decode())
+                self.passwords = json.loads(self.security.decrypt(f.read()).decode())
 
     def check_strength(self, pwd):
         score = sum([len(pwd) >= 8, len(pwd) >= 12,
