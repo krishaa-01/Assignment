@@ -20,10 +20,8 @@ TEXT     = "#e8eaf0"
 MUTED    = "#6b7280"
 FONT     = "Consolas"
 
-class SecurityManager:
-    """
-    Handles hashing, encryption, and decryption operations.
-    """
+class SecurityManager: 
+    """Handles hashing, encryption, and decryption operations."""
 
     def __init__(self, key=None):
         self.key = key
@@ -171,6 +169,20 @@ class PasswordManager:
         if score <= 2: return "WEAK", DANGER
         if score <= 4: return "MEDIUM", WARNING
         return "STRONG", ACCENT2
+    
+    def generate_password(self, length=10):
+        """Generate a strong random password."""
+        import random
+        import string
+
+        chars = (
+            string.ascii_letters +
+            string.digits +
+            "!@#$%^&*()"
+        )
+
+        password = "".join(random.choice(chars) for _ in range(length))
+        return password
 
     # ── Main UI ────────────────────────────────────────────────
     def create_ui(self):
